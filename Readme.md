@@ -16,15 +16,12 @@
 ````javascript
 
 form = new Backbone.FormBuilder({
-
   // The model instance to be bound to
   model:    model,
-
   // The success function that will be fired when the model can be saved
   success:  function(){
     Backbone.History.navigate('/models/' + this.model.get('id'));
   },
-
   // (optional): A function to be called if the model save fails
   error: function(){}
 );
