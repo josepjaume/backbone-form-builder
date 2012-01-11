@@ -4,8 +4,8 @@ task :default do
 end
 
 task :compile do
-  if Dir.glob("compiled").length > 1
-    exec "rm compiled/"
+  if Dir.glob("compiled/*").length > 1
+    `rm compiled/*`
   end
   exec "coffee -o compiled -c src/*"
 end
