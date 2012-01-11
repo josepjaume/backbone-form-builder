@@ -1,5 +1,5 @@
 require './spec_helper.coffee'
-require '../src/test.coffee'
+require '../src/backbone_form_builder.coffee'
 
 describe "Test", ->
   it "tests", ->
