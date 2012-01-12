@@ -3,4 +3,8 @@ require '../src/backbone_form_builder.coffee'
 
 describe "Test", ->
   it "tests", ->
-    expect(true).toBeTruthy()
+    dom.env
+      html: "<html><body></body></html>"
+      done: ->
+    $("body").html("Hola")
+    expect($("body").html()).toEqual "Hola"

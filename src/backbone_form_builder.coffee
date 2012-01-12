@@ -1,1 +1,1 @@
-require './test.coffee'
+class Backbone.FormBuilder extends Backbone.View
