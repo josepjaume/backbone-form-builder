@@ -7,10 +7,16 @@ task :compile do
   if Dir.glob("compiled/*").length > 1
     `rm compiled/*`
   end
-  exec "coffee -o compiled -c src/*"
+  `coffee -o compiled -c src/*`
+  Dir['compiled/*.js'].each do |file|
+    file =~ /(.+)\.js/
+    `yuicompressor -o '#{$1}.min.js' '#{file}' --type js`
+    puts "Compiled '#{$1}.min.js'"
+  end
 end
 
 task :install do
-  puts `npm install jasmine-node jsdom backbone jquery`
-  puts `npm install coffee-script -g`
+  puts `npm install yui3 jsdom backbone jquery`
+  puts `npm install -g jasmine-node coffee-script`
+  puts `brew install yuicompressor`
 end
