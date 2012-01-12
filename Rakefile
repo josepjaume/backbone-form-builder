@@ -16,7 +16,7 @@ task :compile do
 end
 
 task :install do
-  puts `npm install yui3 jsdom backbone jquery`
+  puts `npm install sinon yui3 jsdom underscore jquery`
   puts `npm install -g jasmine-node coffee-script`
   puts `brew install yuicompressor`
 end
