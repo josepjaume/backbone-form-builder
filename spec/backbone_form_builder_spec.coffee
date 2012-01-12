@@ -51,7 +51,13 @@ describe "FormBuilder", ->
         expect($(@form_builder.el).text()).toEqual "Howareyou"
 
     describe "addField", ->
+
+      beforeEach ->
+        @field = {}
+        @form_builder.addField @field
+
       it "adds a field to the form", ->
-        field = {}
-        @form_builder.addField field
-        expect(_.include(@form_builder.fields, field)).toBeTruthy()
+        expect(_.include(@form_builder.fields, @field)).toBeTruthy()
+
+      it "assigns this form builder model to the field", ->
+        expect(@field.model).toEqual @model

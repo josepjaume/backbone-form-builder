@@ -12,4 +12,5 @@ class Backbone.FormBuilder extends Backbone.View
       $(@el).append(field.el)
 
   addField: (field) ->
+    field.model = @model
     @fields.push field
