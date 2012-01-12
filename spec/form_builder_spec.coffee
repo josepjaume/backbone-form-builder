@@ -28,7 +28,7 @@ describe "FormBuilder", ->
         expect($(@form_builder.el).html()).toEqual previous_html
 
     describe "when there's some fields", ->
-      it "renders all of them and appends them to the DOM", ->
+      it "renders all of them", ->
         @form_builder.fields = [
           { render: sinon.spy() },
           { render: sinon.spy() },
@@ -40,15 +40,18 @@ describe "FormBuilder", ->
         for field in @form_builder.fields
           expect(field.render.called).toBeTruthy()
 
-      it "appends all of them into the DOM", ->
+      it "appends all of them to the DOM", ->
         @form_builder.fields = [
-          { render: (->), el: $("<p>How</p>", document)},
-          { render: (->),  el: $("<p>are</p>", document)},
-          { render: (->), el: $("<p>you</p>", document)}
+          { render: (->), el: document.createElement('div')},
+          { render: (->), el: document.createElement('div')},
+          { render: (->), el: document.createElement('div')}
         ]
         @form_builder.render()
 
-        expect($(@form_builder.el).text()).toEqual "Howareyou"
+        for field in @form_builder.fields
+          expect(
+            $(@form_builder.el).has(field.el).length
+          ).toEqual 1
 
     describe "addField", ->
 
