@@ -5,7 +5,7 @@ describe "FormBuilder", ->
 
   beforeEach ->
     @model = new FakeModel
-    global.document = jsdom("<html><body>HOla</body></html>")
+    global.document = jsdom("<html><body></body></html>")
     global.window = document.createWindow()
     @form_builder = new Backbone.FormBuilder
       model: @model
