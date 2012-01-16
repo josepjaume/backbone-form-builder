@@ -1,5 +1,5 @@
 desc "Runs the test suite"
-task :default do
+task :default => :compile do
   exec "jasmine-node --coffee spec"
 end
 
@@ -7,7 +7,7 @@ task :compile do
   if Dir.glob("compiled/*").length > 1
     `rm compiled/*`
   end
-  `coffee -o compiled -c src/*`
+  `coffee --lint --join compiled/backbone_form_builder.js --compile --output compiled src/*`
   Dir['compiled/*.js'].each do |file|
     file =~ /(.+)\.js/
     `yuicompressor -o '#{$1}.min.js' '#{file}' --type js`
