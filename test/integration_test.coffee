@@ -1,7 +1,8 @@
-require './test_helper.coffee'
-require '../src/form_builder.coffee'
-require '../src/form_builder/form.coffee'
-require '../src/form_builder/fields/text.coffee'
+require './test_helper'
+require '../src/form_builder'
+require '../src/form_builder/form'
+require '../src/form_builder/fields'
+require '../src/form_builder/fields/text'
 
 describe "Integration", ->
 

@@ -1,5 +1,3 @@
-require './inputs.coffee'
-
 Backbone.FormBuilder.Fields ||= {}
 
 class Backbone.FormBuilder.Fields.Base extends Backbone.View
@@ -10,7 +8,7 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
 
   render: ->
     $(@el).html ""
-    input = @input(@)
+    input = @input(@name, @value())
     input.attr('id', @inputId())
     $(@el).append @label()
     $(@el).append input
@@ -18,7 +16,12 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
   value: ->
     @model.get(@name)
 
-  input: Backbone.FormBuilder.Inputs.Text
+  input: (name, value) ->
+    input = $('<input />')
+    input.attr('name', name)
+    input.attr('type', 'text')
+    input.attr('value', value)
+    input
 
   label: ->
     label = $("<label/>")

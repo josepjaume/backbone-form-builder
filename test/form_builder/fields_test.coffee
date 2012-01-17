@@ -1,7 +1,7 @@
-require '../test_helper.coffee'
-require '../../src/form_builder.coffee'
-require '../../src/form_builder/form.coffee'
-require '../../src/form_builder/fields.coffee'
+require '../test_helper'
+require '../../src/form_builder'
+require '../../src/form_builder/form'
+require '../../src/form_builder/fields'
 
 describe "Field", ->
   beforeEach ->

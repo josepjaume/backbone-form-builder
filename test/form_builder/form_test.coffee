@@ -1,6 +1,6 @@
-require '../test_helper.coffee'
-require '../../src/form_builder.coffee'
-require '../../src/form_builder/form.coffee'
+require '../test_helper'
+require '../../src/form_builder'
+require '../../src/form_builder/form'
 
 describe "FormBuilder", ->
 

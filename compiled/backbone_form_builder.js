@@ -3,7 +3,26 @@
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-  require('../fields');
+  Backbone.FormBuilder.Fields.Password = (function(_super) {
+
+    __extends(Password, _super);
+
+    function Password() {
+      Password.__super__.constructor.apply(this, arguments);
+    }
+
+    Password.prototype.input = function(name, value) {
+      var input;
+      input = $('<input />');
+      input.attr('name', name);
+      input.attr('type', 'password');
+      input.attr('value', value);
+      return input;
+    };
+
+    return Password;
+
+  })(Backbone.FormBuilder.Fields.Base);
 
   Backbone.FormBuilder.Fields.Text = (function(_super) {
 
@@ -13,13 +32,18 @@
       Text.__super__.constructor.apply(this, arguments);
     }
 
-    Text.prototype.input = Backbone.FormBuilder.Inputs.Text;
+    Text.prototype.input = function(name, value) {
+      var input;
+      input = $('<input />');
+      input.attr('name', name);
+      input.attr('type', 'text');
+      input.attr('value', value);
+      return input;
+    };
 
     return Text;
 
   })(Backbone.FormBuilder.Fields.Base);
-
-  require('./inputs.coffee');
 
   (_base = Backbone.FormBuilder).Fields || (_base.Fields = {});
 
@@ -41,7 +65,7 @@
     Base.prototype.render = function() {
       var input;
       $(this.el).html("");
-      input = this.input(this);
+      input = this.input(this.name, this.value());
       input.attr('id', this.inputId());
       $(this.el).append(this.label());
       return $(this.el).append(input);
@@ -51,7 +75,14 @@
       return this.model.get(this.name);
     };
 
-    Base.prototype.input = Backbone.FormBuilder.Inputs.Text;
+    Base.prototype.input = function(name, value) {
+      var input;
+      input = $('<input />');
+      input.attr('name', name);
+      input.attr('type', 'text');
+      input.attr('value', value);
+      return input;
+    };
 
     Base.prototype.label = function() {
       var label;
@@ -189,26 +220,6 @@
     return Form;
 
   })(Backbone.View);
-
-  Backbone.FormBuilder.Inputs = {
-    Text: function(field, options) {
-      var input;
-      if (options == null) options = {};
-      input = $('<input />');
-      input.attr('name', field.name);
-      input.attr('type', 'text');
-      input.attr('value', field.value());
-      return input;
-    },
-    TextArea: function(field, options) {
-      var input;
-      if (options == null) options = {};
-      input = $("<textarea>");
-      input.attr('name', field.name);
-      input.html(field.value());
-      return input;
-    }
-  };
 
   Backbone.FormBuilder = {
     labelMethod: function(model_name, attribute) {

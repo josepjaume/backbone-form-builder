@@ -1,7 +1,7 @@
-class Backbone.FormBuilder.Fields.Text extends Backbone.FormBuilder.Fields.Base
+class Backbone.FormBuilder.Fields.Password extends Backbone.FormBuilder.Fields.Base
   input: (name, value) ->
     input = $('<input />')
     input.attr('name', name)
-    input.attr('type', 'text')
+    input.attr('type', 'password')
     input.attr('value', value)
     input
