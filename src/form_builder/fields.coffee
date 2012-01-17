@@ -23,7 +23,10 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
   label: ->
     label = $("<label/>")
     label.attr('for', @inputId())
-    label.html Backbone.FormBuilder.labelMethod(@modelName, @name)
+    if @options.label
+      label.html @options.label
+    else
+      label.html Backbone.FormBuilder.labelMethod(@modelName, @name)
     label
 
   inputId: ->

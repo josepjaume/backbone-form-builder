@@ -87,3 +87,35 @@ describe "FormBuilder", ->
           expect(@field2_errors).to.contain '4'
           expect(@field2_errors).to.not.contain '1'
           expect(@field2_errors).to.not.contain '2'
+
+
+  describe "save", ->
+    describe "success callback", ->
+      beforeEach ->
+        model = @model
+        @model.save = (options) ->
+          options.success.call(model)
+
+      it "calls the success callback when successful", ->
+        called = false
+        @form_builder.save
+          success: ->
+            called = true
+
+        expect(called).to.be.ok()
+
+    describe "error callback", ->
+      beforeEach ->
+        model = @model
+        @response = response = {email: ['mandatory']}
+        @model.save = (options) ->
+          options.error.call(model, response)
+
+      it "renders the errors", ->
+        errors_called = false
+        @form_builder.renderErrors = (errors) ->
+          expect(errors).to.equal @response
+          errors_called = true
+
+        @form_builder.save()
+        expect(errors_called).to.be.ok()

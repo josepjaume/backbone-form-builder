@@ -5,6 +5,15 @@ class Backbone.FormBuilder.Form extends Backbone.View
   initialize: ->
     @fields ||= []
 
+  save: (options = {}) ->
+    form_builder = @
+
+    @model.save
+      success: options.success
+      error: (model, response) ->
+        options.error(@model) if options.error
+        form_builder.renderErrors(response)
+
   render: ->
     $(@el).html ""
     for field in @fields

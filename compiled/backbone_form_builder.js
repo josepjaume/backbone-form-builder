@@ -57,7 +57,11 @@
       var label;
       label = $("<label/>");
       label.attr('for', this.inputId());
-      label.html(Backbone.FormBuilder.labelMethod(this.modelName, this.name));
+      if (this.options.label) {
+        label.html(this.options.label);
+      } else {
+        label.html(Backbone.FormBuilder.labelMethod(this.modelName, this.name));
+      }
       return label;
     };
 
@@ -98,6 +102,19 @@
 
     Form.prototype.initialize = function() {
       return this.fields || (this.fields = []);
+    };
+
+    Form.prototype.save = function(options) {
+      var form_builder;
+      if (options == null) options = {};
+      form_builder = this;
+      return this.model.save({
+        success: options.success,
+        error: function(model, response) {
+          if (options.error) options.error(this.model);
+          return form_builder.renderErrors(response);
+        }
+      });
     };
 
     Form.prototype.render = function() {
