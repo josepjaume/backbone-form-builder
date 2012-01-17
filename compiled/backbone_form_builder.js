@@ -45,6 +45,27 @@
 
   })(Backbone.FormBuilder.Fields.Base);
 
+  Backbone.FormBuilder.Fields.TextArea = (function(_super) {
+
+    __extends(TextArea, _super);
+
+    function TextArea() {
+      TextArea.__super__.constructor.apply(this, arguments);
+    }
+
+    TextArea.prototype.input = function(name, value) {
+      var input;
+      input = $('<textarea />');
+      input.attr('name', name);
+      input.attr('type', 'text');
+      input.html(value);
+      return input;
+    };
+
+    return TextArea;
+
+  })(Backbone.FormBuilder.Fields.Base);
+
   (_base = Backbone.FormBuilder).Fields || (_base.Fields = {});
 
   Backbone.FormBuilder.Fields.Base = (function(_super) {
