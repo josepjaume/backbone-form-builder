@@ -1,6 +1,7 @@
 desc "Runs the test suite"
 task :default => :compile do
-  exec "jasmine-node --coffee spec"
+  files = Dir.glob("test/**/*_test.coffee")
+  exec "mocha --reporter dot #{files.join " "}"
 end
 
 task :compile do
@@ -16,7 +17,7 @@ task :compile do
 end
 
 task :install do
-  puts `npm install sinon yui3 jsdom underscore jquery`
-  puts `npm install -g jasmine-node coffee-script`
+  puts `npm install sinon yui3 jsdom underscore jquery expect.js`
+  puts `npm install -g mocha coffee-script`
   puts `brew install yuicompressor`
 end

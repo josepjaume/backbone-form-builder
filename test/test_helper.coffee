@@ -1,6 +1,9 @@
-global.jsdom = require("jsdom").jsdom
+global.jsdom = require("jsdom")
+global.window = jsdom.jsdom().createWindow()
+global.document = window.document
 
 global.sinon = require 'sinon'
+global.expect = require 'expect.js'
 
 global.jQuery = require 'jquery'
 global.$ = global.jQuery

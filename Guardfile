@@ -1,4 +1,4 @@
 guard :shell do
-  watch(/^spec\/(.+)spec\.(js|coffee)$/) { |m| `jasmine-node --coffee spec --match "#{m[1]}"`}
-  watch(/^src\/(.+)\.(js|coffee)$/) { |m| `jasmine-node --coffee spec --match "#{m[1]}_"`}
+  watch(/^test\/(.+)_test\.(js|coffee)$/) { |m| `mocha "test/#{m[1]}_test.coffee"`}
+  watch(/^src\/(.+)\.(js|coffee)$/) { |m| `mocha "test/#{m[1]}_test.coffee"`}
 end
