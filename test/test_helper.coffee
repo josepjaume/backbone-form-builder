@@ -11,3 +11,6 @@ global._ = require 'underscore'
 global.Backbone = (require './support/backbone.js')
 
 global.FakeModel = require './fake_model'
+
+beforeEach ->
+  $("body").html("")

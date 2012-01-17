@@ -1,41 +1,88 @@
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty,
+  var _base,
+    __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  require('../fields');
+
+  Backbone.FormBuilder.Fields.Text = (function(_super) {
+
+    __extends(Text, _super);
+
+    function Text() {
+      Text.__super__.constructor.apply(this, arguments);
+    }
+
+    Text.prototype.input = Backbone.FormBuilder.Inputs.Text;
+
+    return Text;
+
+  })(Backbone.FormBuilder.Fields.Base);
 
   require('./inputs.coffee');
 
-  Backbone.FormBuilder.Field = (function(_super) {
+  (_base = Backbone.FormBuilder).Fields || (_base.Fields = {});
 
-    __extends(Field, _super);
+  Backbone.FormBuilder.Fields.Base = (function(_super) {
 
-    function Field() {
-      Field.__super__.constructor.apply(this, arguments);
+    __extends(Base, _super);
+
+    function Base() {
+      Base.__super__.constructor.apply(this, arguments);
     }
 
-    Field.prototype.initialize = function(options) {
+    Base.prototype.initialize = function(options) {
       if (options == null) options = {};
-      _.bindAll(this, 'render', 'value', 'input', 'renderErrors');
-      this.name = options.name;
-      return this.model = options.model;
+      return this.options = options;
     };
 
-    Field.prototype.className = 'field';
+    Base.prototype.className = 'field';
 
-    Field.prototype.render = function() {
+    Base.prototype.render = function() {
+      var input;
       $(this.el).html("");
-      $(this.el).append(this.input(this));
-      return this.renderErrors();
+      input = this.input(this);
+      input.attr('id', this.inputId());
+      $(this.el).append(this.label());
+      return $(this.el).append(input);
     };
 
-    Field.prototype.value = function() {
+    Base.prototype.value = function() {
       return this.model.get(this.name);
     };
 
-    Field.prototype.input = Backbone.FormBuilder.Inputs.Text;
+    Base.prototype.input = Backbone.FormBuilder.Inputs.Text;
 
-    Field.prototype.renderErrors = function() {};
+    Base.prototype.label = function() {
+      var label;
+      label = $("<label/>");
+      label.attr('for', this.inputId());
+      label.html(Backbone.FormBuilder.labelMethod(this.modelName, this.name));
+      return label;
+    };
 
-    return Field;
+    Base.prototype.inputId = function() {
+      return "" + (this.modelName()) + "_" + this.name;
+    };
+
+    Base.prototype.modelName = function() {
+      return this.model.constructor.name;
+    };
+
+    Base.prototype.renderErrors = function(errors) {
+      if (errors == null) errors = [];
+      if (!this.error_container) {
+        this.error_container = $("<div class='errors'/>");
+        $(this.el).append(this.error_container);
+      }
+      if (errors.length > 0) {
+        return this.error_container.html(errors.join(", "));
+      } else {
+        return this.error_container.remove();
+      }
+    };
+
+    return Base;
 
   })(Backbone.View);
 
@@ -54,48 +101,82 @@
     };
 
     Form.prototype.render = function() {
-      var _this = this;
+      var field, _i, _len, _ref, _results;
       $(this.el).html("");
-      return _.each(this.fields, function(field) {
+      _ref = this.fields;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        field = _ref[_i];
         field.render();
-        return $(_this.el).append(field.el);
+        _results.push($(this.el).append(field.el));
+      }
+      return _results;
+    };
+
+    Form.prototype.renderErrors = function(errors) {
+      var field, field_errors, _i, _len, _ref, _results;
+      _ref = this.fields;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        field = _ref[_i];
+        if (field_errors = errors[field.name]) {
+          _results.push(field.renderErrors(field_errors));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    Form.prototype.addField = function(name, type, options) {
+      var field;
+      if (options == null) options = {};
+      field = new Backbone.FormBuilder.Fields[this.camelize(type)](options);
+      field.model = this.model;
+      field.name = name;
+      this.fields.push(field);
+      return field;
+    };
+
+    Form.prototype.camelize = function(string) {
+      return string.replace(/(?:^|[-_])(\w)/g, function(_, c) {
+        if (c) return c.toUpperCase();
       });
     };
 
-    Form.prototype.addField = function(field) {
-      field.model = this.model;
-      return this.fields.push(field);
-    };
+    Form.prototype.parseErrors = Backbone.FormBuilder.parseErrors;
 
     return Form;
 
   })(Backbone.View);
 
   Backbone.FormBuilder.Inputs = {
-    Text: function(field) {
-      return $('<input />').attr('name', field.name).attr('type', 'text').attr('value', field.value());
+    Text: function(field, options) {
+      var input;
+      if (options == null) options = {};
+      input = $('<input />');
+      input.attr('name', field.name);
+      input.attr('type', 'text');
+      input.attr('value', field.value());
+      return input;
     },
-    TextArea: function(field) {
-      return $("<textarea>").attr('name', field.name).html(field.value());
+    TextArea: function(field, options) {
+      var input;
+      if (options == null) options = {};
+      input = $("<textarea>");
+      input.attr('name', field.name);
+      input.html(field.value());
+      return input;
     }
   };
 
-  require('./field');
-
-  Backbone.FormBuilder.TextField = (function(_super) {
-
-    __extends(TextField, _super);
-
-    function TextField() {
-      TextField.__super__.constructor.apply(this, arguments);
+  Backbone.FormBuilder = {
+    labelMethod: function(model_name, attribute) {
+      return "" + attribute;
+    },
+    parseErrors: function(json) {
+      return json.errors;
     }
-
-    TextField.prototype.input = Backbone.FormBuilder.Inputs.Text;
-
-    return TextField;
-
-  })(Backbone.FormBuilder.Field);
-
-  Backbone.FormBuilder = {};
+  };
 
 }).call(this);

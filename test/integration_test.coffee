@@ -1,7 +1,7 @@
 require './test_helper.coffee'
 require '../src/form_builder.coffee'
 require '../src/form_builder/form.coffee'
-require '../src/form_builder/text_field.coffee'
+require '../src/form_builder/fields/text.coffee'
 
 describe "Integration", ->
 
@@ -12,9 +12,13 @@ describe "Integration", ->
       model: @model
     @container.append(@form_builder.el)
 
-  describe "render", ->
+  describe "form without fields", ->
     it "renders an empty form", ->
       @form_builder.render()
       expect(@container.has("form")).to.have.length(1)
 
-  describe "addField", ->
+  describe "form with fields", ->
+    it "renders a form with an input", ->
+      @form_builder.addField('email', 'text')
+      @form_builder.render()
+      expect(@container.has("form")).to.have.length(1)

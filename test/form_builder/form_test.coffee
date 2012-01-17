@@ -52,14 +52,38 @@ describe "FormBuilder", ->
             $(@form_builder.el).has(field.el).length
           ).to.equal 1
 
-    describe "addField", ->
+    describe "renderErrors", ->
+      describe "when provided with some errors", ->
+        beforeEach ->
+          field1_errors = undefined
+          field2_errors = undefined
 
-      beforeEach ->
-        @field = {}
-        @form_builder.addField @field
+          field1 =
+            name: 'email'
+            renderErrors: (errors) ->
+              field1_errors = errors
 
-      it "adds a field to the form", ->
-        expect(_.include(@form_builder.fields, @field)).to.be.ok()
+          field2 =
+            name: 'name'
+            renderErrors: (errors) ->
+              field2_errors = errors
 
-      it "assigns this form builder model to the field", ->
-        expect(@field.model).to.equal @model
+          @form_builder.fields = [field1, field2]
+          @form_builder.renderErrors
+            email: ['1', '2']
+            name: ['3', '4']
+
+          @field1_errors = field1_errors
+          @field2_errors = field2_errors
+
+        it "renders the correct errors to the first field", ->
+          expect(@field1_errors).to.contain '1'
+          expect(@field1_errors).to.contain '2'
+          expect(@field1_errors).to.not.contain '3'
+          expect(@field1_errors).to.not.contain '4'
+
+        it "renders the correct errors to the second field", ->
+          expect(@field2_errors).to.contain '3'
+          expect(@field2_errors).to.contain '4'
+          expect(@field2_errors).to.not.contain '1'
+          expect(@field2_errors).to.not.contain '2'

@@ -1,11 +1,13 @@
 Backbone.FormBuilder.Inputs =
-  Text: (field) ->
-    $('<input />').
-      attr('name', field.name).
-      attr('type', 'text').
-      attr('value', field.value())
+  Text: (field, options = {}) ->
+    input = $('<input />')
+    input.attr('name', field.name)
+    input.attr('type', 'text')
+    input.attr('value', field.value())
+    input
 
-  TextArea: (field) ->
-    $("<textarea>").
-      attr('name', field.name).
-      html field.value()
+  TextArea: (field, options = {}) ->
+    input = $("<textarea>")
+    input.attr('name', field.name)
+    input.html field.value()
+    input
