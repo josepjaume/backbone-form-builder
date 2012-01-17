@@ -27,19 +27,18 @@ form = new Backbone.FormBuilder({
 );
 
 // This will attach a single text field to the form bound to the 'email'
-// property. Will validate presence.
-form.addField('email', {type: 'string', validates: 'presence'});
+// property.
+form.addField('email', 'password');
 
 // This will attach a single password field to the form bound to the 'password'
 // property. Will use a custom function to render the label value. Will
 // validate presence.
-form.addField('password', {
-  type: 'password', validates: 'presence',
-  label: function(){ I18n.t('user.password') }
+form.addField('password', 'password',
+  {label: function(){ I18n.t('user.password') }
 });
 
 // This will create a single text field without any validations.
-form.addField('biography', {type: 'text'});
+form.addField('biography', 'text_area'});
 
 ````
 

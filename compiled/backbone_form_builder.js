@@ -100,14 +100,37 @@
 
     Form.prototype.tagName = 'form';
 
-    Form.prototype.initialize = function() {
-      return this.fields || (this.fields = []);
+    Form.prototype.initialize = function(options) {
+      var callbacks,
+        _this = this;
+      this.fields || (this.fields = []);
+      callbacks = {
+        success: options.success,
+        error: options.error
+      };
+      return $(this.el).submit(function() {
+        _this.save(callbacks);
+        return false;
+      });
+    };
+
+    Form.prototype.formData = function() {
+      var field, fields, result, value, _i, _len;
+      fields = $(this.el).serializeArray();
+      result = {};
+      for (_i = 0, _len = fields.length; _i < _len; _i++) {
+        field = fields[_i];
+        value = field.value || "";
+        result[field.name] = value;
+      }
+      return result;
     };
 
     Form.prototype.save = function(options) {
       var form_builder;
       if (options == null) options = {};
       form_builder = this;
+      this.model.set(this.formData());
       return this.model.save({
         success: options.success,
         error: function(model, response) {

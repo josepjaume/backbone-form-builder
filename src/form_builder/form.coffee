@@ -2,12 +2,27 @@ class Backbone.FormBuilder.Form extends Backbone.View
 
   tagName: 'form'
 
-  initialize: ->
+  initialize: (options) ->
     @fields ||= []
+    callbacks =
+      success: options.success
+      error: options.error
+
+    $(@el).submit =>
+      @save(callbacks)
+      false
+
+  formData: ->
+    fields = $(@el).serializeArray()
+    result = {}
+    for field in fields
+      value = field.value || ""
+      result[field.name] = value
+    result
 
   save: (options = {}) ->
     form_builder = @
-
+    @model.set @formData()
     @model.save
       success: options.success
       error: (model, response) ->
