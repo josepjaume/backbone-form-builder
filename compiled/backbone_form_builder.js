@@ -74,16 +74,12 @@
     };
 
     Form.prototype.renderErrors = function(errors) {
-      var field, field_errors, _i, _len, _ref, _results;
+      var field, _i, _len, _ref, _results;
       _ref = this.fields;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         field = _ref[_i];
-        if (field_errors = errors[field.name]) {
-          _results.push(field.renderErrors(field_errors));
-        } else {
-          _results.push(void 0);
-        }
+        _results.push(field.renderErrors(errors[field.name]));
       }
       return _results;
     };
@@ -178,7 +174,8 @@
       if (errors.length > 0) {
         return this.error_container.html(errors.join(", "));
       } else {
-        return this.error_container.remove();
+        this.error_container.remove();
+        return this.error_container = void 0;
       }
     };
 

@@ -37,8 +37,7 @@ class Backbone.FormBuilder.Form extends Backbone.View
 
   renderErrors: (errors) ->
     for field in @fields
-      if field_errors = errors[field.name]
-        field.renderErrors(field_errors)
+      field.renderErrors(errors[field.name])
 
   addField: (name, type, options = {}) ->
     field = new Backbone.FormBuilder.Fields[@camelize type](options)

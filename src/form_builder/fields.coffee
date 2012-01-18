@@ -47,3 +47,4 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
       @error_container.html errors.join(", ")
     else
       @error_container.remove()
+      @error_container = undefined
