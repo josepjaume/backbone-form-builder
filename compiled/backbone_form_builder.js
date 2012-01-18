@@ -8,7 +8,7 @@
       return "" + attribute;
     },
     parseErrors: function(response) {
-      return jQuery.parseJSON(response);
+      return JSON.parse(response);
     }
   };
 

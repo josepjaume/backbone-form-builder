@@ -3,4 +3,4 @@ Backbone.FormBuilder =
     "#{attribute}"
 
   parseErrors: (response) ->
-    jQuery.parseJSON response
+    JSON.parse response
