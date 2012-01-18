@@ -8,7 +8,8 @@ task :compile do
   if Dir.glob("compiled/*").length > 1
     `rm compiled/*`
   end
-  `coffee --lint --join compiled/backbone_form_builder.js --compile --output compiled src/*`
+  files = Dir.glob("src/**/*.coffee").reverse
+  `coffee --lint --join compiled/backbone_form_builder.js --compile --output compiled #{files.join(" ")}`
   Dir['compiled/*.js'].each do |file|
     file =~ /(.+)\.js/
     `yuicompressor -o '#{$1}.min.js' '#{file}' --type js`

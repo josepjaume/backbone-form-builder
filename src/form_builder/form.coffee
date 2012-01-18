@@ -22,18 +22,18 @@ class Backbone.FormBuilder.Form extends Backbone.View
 
   save: (options = {}) ->
     form_builder = @
-    @model.set @formData()
-    @model.save
+    @model.save @formData(),
       success: options.success
       error: (model, response) ->
         options.error(@model) if options.error
-        form_builder.renderErrors(response)
+        form_builder.renderErrors(form_builder.parseErrors(response.responseText))
 
   render: ->
     $(@el).html ""
     for field in @fields
       field.render()
       $(@el).append(field.el)
+    @
 
   renderErrors: (errors) ->
     for field in @fields

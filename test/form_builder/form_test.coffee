@@ -93,7 +93,7 @@ describe "FormBuilder", ->
     describe "success callback", ->
       beforeEach ->
         model = @model
-        @model.save = (options) ->
+        @model.save = (data, options) ->
           options.success.call(model)
 
       it "calls the success callback when successful", ->
@@ -107,14 +107,16 @@ describe "FormBuilder", ->
     describe "error callback", ->
       beforeEach ->
         model = @model
-        @response = response = {email: ['mandatory']}
-        @model.save = (options) ->
-          options.error.call(model, response)
+        @response = response =
+          responseText: '{"email": ["mandatory"]}'
+
+        @model.save = (data, options) ->
+          options.error(model, response)
 
       it "renders the errors", ->
         errors_called = false
         @form_builder.renderErrors = (errors) ->
-          expect(errors).to.equal @response
+          expect(errors.email).to.contain "mandatory"
           errors_called = true
 
         @form_builder.save()

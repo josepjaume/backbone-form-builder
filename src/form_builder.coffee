@@ -2,5 +2,5 @@ Backbone.FormBuilder =
   labelMethod: (model_name, attribute) ->
     "#{attribute}"
 
-  parseErrors: (json) ->
-    json.errors
+  parseErrors: (response) ->
+    jQuery.parseJSON response
