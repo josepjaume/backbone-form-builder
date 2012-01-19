@@ -129,7 +129,7 @@
       $(this.el).html("");
       input = this.input(this.name, this.value(), this.options);
       input.attr('id', this.inputId());
-      $(this.el).append(this.label());
+      if (this.options.label !== false) $(this.el).append(this.label());
       return $(this.el).append(input);
     };
 

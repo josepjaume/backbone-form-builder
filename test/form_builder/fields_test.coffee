@@ -29,6 +29,32 @@ describe "Field", ->
       value = $("input", @field.el).attr('value')
       expect(value).to.equal 'fake@fakedomain.com'
 
+    describe "label", ->
+      it "renders a label by default", ->
+        @field.render()
+        expect($("label", @field.el)).to.have.length(1)
+
+      it "doesn't render a label if label option is false", ->
+        @field.options.label = false
+        @field.render()
+        expect($("label", @field.el)).to.have.length(0)
+
+  describe "label", ->
+    describe "for property", ->
+      beforeEach ->
+        @label = @field.label()
+
+      it "contains the model name", ->
+        expect(@label.attr('for')).to.contain @field.modelName()
+
+      it "contains the field name", ->
+        expect(@label.attr('for')).to.contain @field.name
+
+    it "renders the provided text", ->
+      @field.options.label = "Awesome Label"
+      @label = @field.label()
+      expect(@label.html()).to.equal "Awesome Label"
+
   describe "renderErrors", ->
     describe "when no errors are supplied", ->
       it "does not render anything special", ->

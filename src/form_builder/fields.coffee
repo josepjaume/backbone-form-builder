@@ -10,7 +10,7 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
     $(@el).html ""
     input = @input(@name, @value(), @options)
     input.attr('id', @inputId())
-    $(@el).append @label()
+    $(@el).append @label() if @options.label != false
     $(@el).append input
 
   value: ->
