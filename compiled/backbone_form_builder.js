@@ -50,16 +50,23 @@
     };
 
     Form.prototype.save = function(options) {
-      var form_builder;
+      var data, form_builder, key;
       if (options == null) options = {};
       form_builder = this;
-      return this.model.save(this.formData(), {
+      key = this.modelKey();
+      data = {};
+      data[key] = this.formData();
+      return this.model.save(data, {
         success: options.success,
         error: function(model, response) {
           if (options.error) options.error(this.model);
           return form_builder.renderErrors(form_builder.parseErrors(response.responseText));
         }
       });
+    };
+
+    Form.prototype.modelKey = function() {
+      return this.underscore(this.model.constructor.name);
     };
 
     Form.prototype.render = function() {
@@ -99,6 +106,10 @@
       return string.replace(/(?:^|[-_])(\w)/g, function(_, c) {
         if (c) return c.toUpperCase();
       });
+    };
+
+    Form.prototype.underscore = function(string) {
+      return string.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').toLowerCase();
     };
 
     Form.prototype.parseErrors = Backbone.FormBuilder.parseErrors;

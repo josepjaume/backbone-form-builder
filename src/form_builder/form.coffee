@@ -22,11 +22,18 @@ class Backbone.FormBuilder.Form extends Backbone.View
 
   save: (options = {}) ->
     form_builder = @
-    @model.save @formData(),
+    key = @modelKey()
+    data = {}
+    data[key] = @formData()
+
+    @model.save data,
       success: options.success
       error: (model, response) ->
         options.error(@model) if options.error
         form_builder.renderErrors(form_builder.parseErrors(response.responseText))
+
+  modelKey: ->
+    @underscore @model.constructor.name
 
   render: ->
     $(@el).html ""
@@ -49,5 +56,8 @@ class Backbone.FormBuilder.Form extends Backbone.View
   camelize: (string) ->
     string.replace /(?:^|[-_])(\w)/g, (_, c) ->
       c.toUpperCase() if c
+
+  underscore: (string) ->
+    string.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').toLowerCase()
 
   parseErrors: Backbone.FormBuilder.parseErrors
