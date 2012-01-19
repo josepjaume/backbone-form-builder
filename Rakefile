@@ -5,16 +5,13 @@ task :default => :compile do
 end
 
 task :compile do
-  if Dir.glob("compiled/*").length > 1
-    `rm compiled/*`
-  end
   files = Dir.glob("src/**/*.coffee").reverse
   `coffee --lint --join compiled/backbone_form_builder.js --compile --output compiled #{files.join(" ")}`
-  Dir['compiled/*.js'].each do |file|
-    file =~ /(.+)\.js/
-    `yuicompressor -o '#{$1}.min.js' '#{file}' --type js`
-    puts "Compiled '#{$1}.min.js'"
+  if File.exists?('compiled/backbone_form_builder.min.js')
+    `rm compiled/backbone_form_builder.min.js`
   end
+  `yuicompressor -o 'compiled/backbone_form_builder.min.js' 'compiled/backbone_form_builder.js' --type js`
+  puts "Compiled 'backbone_form_builder.min.js'"
 end
 
 task :install do
