@@ -1,7 +1,8 @@
 (function() {
   var _base,
     __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Backbone.FormBuilder = {
     labelMethod: function(model_name, attribute) {
@@ -234,15 +235,19 @@
     }
 
     Select.prototype.input = function(name, value, options) {
-      var input;
+      var input, multiple;
+      if (options.multiple) multiple = true;
       input = $('<select />');
+      if (multiple) input.attr('multiple', 'multiple');
       input.attr('name', name);
-      this.renderOptions(input, value, options.collection);
+      this.renderOptions(input, value, options.collection, multiple);
       return input;
     };
 
-    Select.prototype.renderOptions = function(input, selected, collection) {
+    Select.prototype.renderOptions = function(input, selected, collection, multiple) {
       var element, option, text, value, _i, _len, _results;
+      if (multiple == null) multiple = false;
+      if (multiple !== true) selected = [selected];
       _results = [];
       for (_i = 0, _len = collection.length; _i < _len; _i++) {
         element = collection[_i];
@@ -254,7 +259,9 @@
         }
         option = $("<option />");
         option.attr('value', value);
-        if (value === selected) option.attr('selected', 'selected');
+        if (__indexOf.call(selected, value) >= 0) {
+          option.attr('selected', 'selected');
+        }
         option.html(text);
         _results.push(input.append(option));
       }

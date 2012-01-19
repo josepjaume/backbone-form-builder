@@ -1,11 +1,16 @@
 class Backbone.FormBuilder.Fields.Select extends Backbone.FormBuilder.Fields.Base
   input: (name, value, options) ->
+    multiple = true if options.multiple
+
     input = $('<select />')
+    input.attr('multiple', 'multiple') if multiple
     input.attr('name', name)
-    @renderOptions(input, value, options.collection)
+    @renderOptions(input, value, options.collection, multiple)
     input
 
-  renderOptions: (input, selected, collection) ->
+  renderOptions: (input, selected, collection, multiple = false) ->
+    selected = [selected] unless multiple == true
+
     for element in collection
       if element.value
         value = element.value
@@ -15,6 +20,7 @@ class Backbone.FormBuilder.Fields.Select extends Backbone.FormBuilder.Fields.Bas
 
       option = $("<option />")
       option.attr('value', value)
-      option.attr('selected', 'selected') if value == selected
+      if value in selected
+        option.attr('selected', 'selected')
       option.html(text)
       input.append option
