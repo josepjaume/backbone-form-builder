@@ -8,7 +8,7 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
 
   render: ->
     $(@el).html ""
-    input = @input(@name, @value())
+    input = @input(@name, @value(), @options)
     input.attr('id', @inputId())
     $(@el).append @label()
     $(@el).append input

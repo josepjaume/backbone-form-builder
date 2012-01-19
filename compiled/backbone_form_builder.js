@@ -126,7 +126,7 @@
     Base.prototype.render = function() {
       var input;
       $(this.el).html("");
-      input = this.input(this.name, this.value());
+      input = this.input(this.name, this.value(), this.options);
       input.attr('id', this.inputId());
       $(this.el).append(this.label());
       return $(this.el).append(input);
@@ -222,6 +222,46 @@
     };
 
     return Text;
+
+  })(Backbone.FormBuilder.Fields.Base);
+
+  Backbone.FormBuilder.Fields.Select = (function(_super) {
+
+    __extends(Select, _super);
+
+    function Select() {
+      Select.__super__.constructor.apply(this, arguments);
+    }
+
+    Select.prototype.input = function(name, value, options) {
+      var input;
+      input = $('<select />');
+      input.attr('name', name);
+      this.renderOptions(input, value, options.collection);
+      return input;
+    };
+
+    Select.prototype.renderOptions = function(input, selected, collection) {
+      var element, option, text, value, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = collection.length; _i < _len; _i++) {
+        element = collection[_i];
+        if (element.value) {
+          value = element.value;
+          text = element.text;
+        } else {
+          value = text = element;
+        }
+        option = $("<option />");
+        option.attr('value', value);
+        if (value === selected) option.attr('selected', 'selected');
+        option.html(text);
+        _results.push(input.append(option));
+      }
+      return _results;
+    };
+
+    return Select;
 
   })(Backbone.FormBuilder.Fields.Base);
 
