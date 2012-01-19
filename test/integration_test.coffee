@@ -25,7 +25,9 @@ describe "Integration", ->
       @form_builder.render()
 
     it "renders a form with an input", ->
-      expect(@container.has("form")).to.have.length(1)
+      form = $("form", @container)
+      expect(form).to.have.length(1)
+      expect($("input[type=text]", form)).to.have.length(1)
 
     it "returns some valid serialized data", ->
       expect(@form_builder.formData().email).to.equal 'info@fake.com'

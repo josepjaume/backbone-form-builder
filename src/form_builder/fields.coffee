@@ -29,14 +29,14 @@ class Backbone.FormBuilder.Fields.Base extends Backbone.View
     if @options.label
       label.html @options.label
     else
-      label.html Backbone.FormBuilder.labelMethod(@modelName, @name)
+      label.html Backbone.FormBuilder.labelMethod(@modelName(), @name)
     label
 
   inputId: ->
     "#{@modelName()}_#{@name}"
 
   modelName: ->
-    @model.constructor.name
+    Backbone.FormBuilder.underscore @model.constructor.name
 
   renderErrors: (errors = []) ->
     unless @error_container

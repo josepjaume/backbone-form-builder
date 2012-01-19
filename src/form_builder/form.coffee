@@ -33,7 +33,7 @@ class Backbone.FormBuilder.Form extends Backbone.View
         form_builder.renderErrors(form_builder.parseErrors(response.responseText))
 
   modelKey: ->
-    @underscore @model.constructor.name
+    Backbone.FormBuilder.underscore @model.constructor.name
 
   render: ->
     $(@el).html ""
@@ -47,17 +47,10 @@ class Backbone.FormBuilder.Form extends Backbone.View
       field.renderErrors(errors[field.name])
 
   addField: (name, type, options = {}) ->
-    field = new Backbone.FormBuilder.Fields[@camelize type](options)
+    field = new Backbone.FormBuilder.Fields[Backbone.FormBuilder.camelize type](options)
     field.model = @model
     field.name = name
     @fields.push field
     field
-
-  camelize: (string) ->
-    string.replace /(?:^|[-_])(\w)/g, (_, c) ->
-      c.toUpperCase() if c
-
-  underscore: (string) ->
-    string.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').toLowerCase()
 
   parseErrors: Backbone.FormBuilder.parseErrors

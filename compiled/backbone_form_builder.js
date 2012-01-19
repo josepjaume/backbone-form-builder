@@ -6,10 +6,18 @@
 
   Backbone.FormBuilder = {
     labelMethod: function(model_name, attribute) {
-      return "" + attribute;
+      return Backbone.FormBuilder.camelize("" + attribute);
     },
     parseErrors: function(response) {
       return JSON.parse(response);
+    },
+    camelize: function(string) {
+      return string.replace(/(?:^|[-_])(\w)/g, function(_, c) {
+        if (c) return c.toUpperCase();
+      });
+    },
+    underscore: function(string) {
+      return string.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').toLowerCase();
     }
   };
 
@@ -66,7 +74,7 @@
     };
 
     Form.prototype.modelKey = function() {
-      return this.underscore(this.model.constructor.name);
+      return Backbone.FormBuilder.underscore(this.model.constructor.name);
     };
 
     Form.prototype.render = function() {
@@ -95,21 +103,11 @@
     Form.prototype.addField = function(name, type, options) {
       var field;
       if (options == null) options = {};
-      field = new Backbone.FormBuilder.Fields[this.camelize(type)](options);
+      field = new Backbone.FormBuilder.Fields[Backbone.FormBuilder.camelize(type)](options);
       field.model = this.model;
       field.name = name;
       this.fields.push(field);
       return field;
-    };
-
-    Form.prototype.camelize = function(string) {
-      return string.replace(/(?:^|[-_])(\w)/g, function(_, c) {
-        if (c) return c.toUpperCase();
-      });
-    };
-
-    Form.prototype.underscore = function(string) {
-      return string.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').toLowerCase();
     };
 
     Form.prototype.parseErrors = Backbone.FormBuilder.parseErrors;
@@ -164,7 +162,7 @@
       if (this.options.label) {
         label.html(this.options.label);
       } else {
-        label.html(Backbone.FormBuilder.labelMethod(this.modelName, this.name));
+        label.html(Backbone.FormBuilder.labelMethod(this.modelName(), this.name));
       }
       return label;
     };
@@ -174,7 +172,7 @@
     };
 
     Base.prototype.modelName = function() {
-      return this.model.constructor.name;
+      return Backbone.FormBuilder.underscore(this.model.constructor.name);
     };
 
     Base.prototype.renderErrors = function(errors) {
