@@ -4,7 +4,7 @@ Backbone.FormBuilder =
     Backbone.FormBuilder.camelize "#{attribute}"
 
   parseErrors: (response) ->
-    JSON.parse response
+    JSON.parse(response).errors
 
   camelize: (string) ->
     string.replace /(?:^|[-_])(\w)/g, (_, c) ->
