@@ -108,7 +108,7 @@ describe "FormBuilder", ->
       beforeEach ->
         model = @model
         @response = response =
-          responseText: '{"email": ["mandatory"]}'
+          responseText: '{"errors": {"email": ["mandatory"]}}'
 
         @model.save = (data, options) ->
           options.error(model, response)

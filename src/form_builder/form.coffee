@@ -30,7 +30,8 @@ class Backbone.FormBuilder.Form extends Backbone.View
       success: options.success
       error: (model, response) ->
         options.error(@model) if options.error
-        form_builder.renderErrors(form_builder.parseErrors(response.responseText))
+        errors = form_builder.parseErrors(response.responseText)
+        form_builder.renderErrors(errors)
 
   modelKey: ->
     Backbone.FormBuilder.underscore @model.constructor.name
