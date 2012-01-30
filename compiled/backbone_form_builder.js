@@ -9,7 +9,7 @@
       return Backbone.FormBuilder.camelize("" + attribute);
     },
     parseErrors: function(response) {
-      return JSON.parse(response);
+      return JSON.parse(response).errors;
     },
     camelize: function(string) {
       return string.replace(/(?:^|[-_])(\w)/g, function(_, c) {
@@ -67,8 +67,10 @@
       return this.model.save(data, {
         success: options.success,
         error: function(model, response) {
+          var errors;
           if (options.error) options.error(this.model);
-          return form_builder.renderErrors(form_builder.parseErrors(response.responseText));
+          errors = form_builder.parseErrors(response.responseText);
+          return form_builder.renderErrors(errors);
         }
       });
     };
