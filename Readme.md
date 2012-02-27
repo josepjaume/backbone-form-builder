@@ -42,10 +42,6 @@ form.addField('biography', 'text_area'});
 
 ````
 
-## Development
-
-Backbone FormBuilder is still purely an **IDEA**. This means that still isn't developed at all.
-
 ## Contributions
 
 Appreciated :D
